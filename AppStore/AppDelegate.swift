@@ -16,6 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //change the main view from storyboard to our new view
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        
+        let layout = UICollectionViewFlowLayout()
+        let featuredAppsController = FeaturedAppController(collectionViewLayout: layout)
+        window?.rootViewController = UINavigationController(rootViewController: featuredAppsController)//make like a title space on top of the view
+        
+        
+        
         return true
     }
 
