@@ -9,6 +9,14 @@
 import UIKit
 
 class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UICollectionViewDelegate{
+    
+    var appCategory : AppCategory? {
+        didSet{
+            if let name = appCategory?.name{
+                nameLabel.text = name
+            }
+        }
+    }
 
     private let cellId = "appCellId"
     
@@ -73,19 +81,23 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         
     }
     
-    //numberOfItemsInSection - 5 item of app cell
+    //numberOfItemsInSection - appCategory?.apps?.count- number of apps per category
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        if let count =  appCategory?.apps?.count{
+            return count
+        }
+        return 0
     }
     
     //sizeForItemAt - app cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: frame.height - 32)
+        return CGSize(width: 100, height: frame.height - 32)//substract 32 because the title
     }
     
     //create cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppCell
+        cell.app = appCategory?.apps?[indexPath.item]
         return cell
     }
     
@@ -95,7 +107,51 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
     }
 }
 
+
+
+
+
+
+
+
+
+
 class AppCell: UICollectionViewCell { //the inside cell (app cell)
+    
+    
+    var app: App?{
+        didSet{
+            if let name = app?.name {
+                nameLabel.text = name
+                
+                let rect = NSString(string: name).boundingRect(with: CGSize(width: frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [kCTFontAttributeName as NSAttributedStringKey: UIFont.systemFont(ofSize: 14)], context: nil)
+                
+                if rect.height > 20{ //two lines
+                    categoryLabel.frame = CGRect(x: 0, y: frame.width+38, width: frame.width, height: 20)
+                    priceLabel.frame = CGRect(x: 0, y: frame.width+56, width: frame.width, height: 20)
+                }else{//one line
+                    categoryLabel.frame = CGRect(x: 0, y: frame.width+22, width: frame.width, height: 20)
+                    priceLabel.frame = CGRect(x: 0, y: frame.width+40, width: frame.width, height: 20)
+                }
+                nameLabel.frame = CGRect(x: 0, y: frame.width+5, width: frame.width, height: 40)
+                nameLabel.sizeToFit()
+
+            }
+            categoryLabel.text = app?.category
+            if let price = app?.price{
+                priceLabel.text = "$\(price)"
+            }else{
+                priceLabel.text = ""
+            }
+            if let imageName = app?.imageName{
+                imageView.image = UIImage(named: imageName)
+            }
+            
+            
+        }
+    }
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -107,7 +163,7 @@ class AppCell: UICollectionViewCell { //the inside cell (app cell)
     
     let imageView : UIImageView = {
        let iv = UIImageView()
-        iv.image = UIImage(named: "frozen")
+        //iv.image = UIImage(named: "frozen")
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 16 //round corner
         iv.layer.masksToBounds = true

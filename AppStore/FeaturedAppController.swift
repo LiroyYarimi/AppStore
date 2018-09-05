@@ -11,10 +11,15 @@ import UIKit
 class FeaturedAppController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     private let cellId = "cellId"
+    var appCategories : [AppCategory]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        AppCategory.fetchFeaturedApps { (appCategories) in //gets appCategories (from server) and show it
+            self.appCategories = appCategories
+            self.collectionView?.reloadData()
+        }
         
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: cellId)
@@ -23,11 +28,17 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
     //cellForItemAt - create cell
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CategoryCell
+        cell.appCategory = appCategories?[indexPath.item]
+        
         return cell
     }
     //numberOfItemsInSection - number of items
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        if let count = appCategories?.count{
+            return count
+        }else{
+            return 0
+        }
     }
     
     //sizeForItemAt - cell size
