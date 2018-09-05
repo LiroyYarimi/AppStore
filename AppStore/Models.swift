@@ -8,6 +8,29 @@
 
 import UIKit
 
+class FeaturedApps : NSObject {
+    var bannerCategory: AppCategory?
+    var appCategories: [AppCategory]?
+    
+    override func setValue(_ value: Any?, forKey key: String) {
+        if key == "categories"{
+            
+            var appCategories = [AppCategory]()
+            for dict in value as! [[String : AnyObject]] {
+                let appCategory = AppCategory()
+                appCategory.setValuesForKeys(dict)
+                appCategories.append(appCategory)
+            }
+            self.appCategories = appCategories
+        }else if key == "bannerCategory"{
+            bannerCategory = AppCategory()
+            bannerCategory?.setValuesForKeys(value as! [String:AnyObject])
+        }else{
+            super.setValue(value, forKey: key)
+        }
+    }
+}
+
 
 class AppCategory : NSObject{
     
@@ -16,6 +39,7 @@ class AppCategory : NSObject{
     var type: String?
     
     
+    //override setValue func - for set value of our properties
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "apps"{
             
@@ -35,11 +59,11 @@ class AppCategory : NSObject{
     
 }
     
-    static func fetchFeaturedApps(completionHandler: @escaping ([AppCategory]) -> ()){
+    //JSON request (without parameters) for all app details
+    static func fetchFeaturedApps(completionHandler: @escaping (FeaturedApps) -> ()){
         
         let urlString = "https://api.letsbuildthatapp.com/appstore/featured"
-        
-        
+
         URLSession.shared.dataTask(with: URL(string: urlString)!) { (data, response, error) in
             if error != nil{
                 print(error!)
@@ -49,18 +73,21 @@ class AppCategory : NSObject{
 
                 let json = try(JSONSerialization.jsonObject(with: data!, options: .mutableContainers)) as! [String:AnyObject]
                 
-                var appCategories = [AppCategory]()
+                let featuredApp = FeaturedApps()
+                featuredApp.setValuesForKeys(json)//as! [String: AnyObject])
                 
-                for dict in json["categories"] as! [[String:AnyObject]]{
-
-                    let appCategory = AppCategory()
-                    appCategory.setValuesForKeys(dict)
-                    appCategories.append(appCategory)
-                }
+//                var appCategories = [AppCategory]()
+//
+//                for dict in json["categories"] as! [[String:AnyObject]]{
+//
+//                    let appCategory = AppCategory()
+//                    appCategory.setValuesForKeys(dict)
+//                    appCategories.append(appCategory)
+//                }
                 
                 //send appCategories to FeaturedAppController class
                 DispatchQueue.main.async(execute: { () -> Void in
-                    completionHandler(appCategories)
+                    completionHandler(featuredApp)
                 })
                 
                 
@@ -71,35 +98,8 @@ class AppCategory : NSObject{
         }.resume()
         
     }
-    
-    
-    
-    static func sampleAppCategories()->[AppCategory]{
-        let bestNewAppCategory = AppCategory()
-        bestNewAppCategory.name = "Best New Apps"
-        
-        var apps = [App]()
-        //logic
-        let frozenApp = App()
-        frozenApp.name = "Disney Buil It: Frozen"
-        frozenApp.imageName = "frozen"
-        frozenApp.category = "Entertainment"
-        frozenApp.price = NSNumber(floatLiteral: 3.99)
-        apps.append(frozenApp)
-        
-        bestNewAppCategory.apps = apps
-        
-        
-        let bestNewGameCategory = AppCategory()
-        bestNewGameCategory.name = "Best New Games"
-        var bestNewGameApps = [App]()
-        let telepaintApp = App(id: nil, name: "Telepaint", category: "Games", imageName: "telepaint", price: NSNumber(floatLiteral: 2.99))
-        
-        bestNewGameApps.append(telepaintApp)
-        bestNewGameCategory.apps = bestNewGameApps
-        return [bestNewAppCategory,bestNewGameCategory]
-    }
 }
+
 
 class App : NSObject{
     
@@ -121,6 +121,7 @@ class App : NSObject{
         self.price = price
     }
     
+    //override setValue func - for set value of our properties
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "Category"{
             self.category = value as! String?

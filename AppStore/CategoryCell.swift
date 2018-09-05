@@ -15,6 +15,7 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
             if let name = appCategory?.name{
                 nameLabel.text = name
             }
+            appCollectionView.reloadData()
         }
     }
 
@@ -58,7 +59,7 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews(){ //apps container cell. the big vertical cell
+    func setupViews(){ //apps container cell. the big vertical cell
         backgroundColor = UIColor.clear
         
         addSubview(appCollectionView) //inside each cell add app cell
@@ -124,6 +125,7 @@ class AppCell: UICollectionViewCell { //the inside cell (app cell)
             if let name = app?.name {
                 nameLabel.text = name
                 
+                //all this for make the spaces fit for one line and two lines.
                 let rect = NSString(string: name).boundingRect(with: CGSize(width: frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [kCTFontAttributeName as NSAttributedStringKey: UIFont.systemFont(ofSize: 14)], context: nil)
                 
                 if rect.height > 20{ //two lines
