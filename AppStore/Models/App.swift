@@ -18,13 +18,13 @@ class App : NSObject{
     
     var screenshots : [String]?
     var desc : String?
-    var appInformation : AnyObject?
+    var appInformation : [Information]?
     
     override init() {
         return
     }
     
-    init(id:NSNumber?, name: String,category:String, imageName:String, price: NSNumber, screenshots: [String]?,desc : String?, appInformation:AnyObject?) {
+    init(id:NSNumber?, name: String,category:String, imageName:String, price: NSNumber, screenshots: [String]?,desc : String?, appInformation:[Information]?) {
         self.id = id
         self.name = name
         self.category = category
@@ -53,11 +53,32 @@ class App : NSObject{
         }else if key == "description"{
             self.desc = value as? String
         }else if key == "appInformation"{
-            self.appInformation = value as AnyObject
+//            self.appInformation = value as AnyObject
+            appInformation = [Information]()
+            for dict in value as! [[String:AnyObject]]{
+                let line = Information()
+                line.setValuesForKeys(dict)
+                appInformation?.append(line)
+            }
         }else{
             super.setValue(value, forKey: key)
         }
         
+    }
+    
+    class Information : NSObject{
+        var name: String?
+        var value : String?
+        
+        override func setValue(_ value: Any?, forKey key: String) {
+            if key == "Name"{
+                self.name = value as! String?
+            }else if key == "Value"{
+                self.value = value as! String?
+            }else{
+                super.setValue(value, forKey: key)
+            }
+        }
     }
     
 }

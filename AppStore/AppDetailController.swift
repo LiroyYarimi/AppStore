@@ -28,7 +28,7 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
                     do{
                         let json = try(JSONSerialization.jsonObject(with: data!, options: .mutableContainers)) as! [String:AnyObject]
                         let appDetail = App()
-                        appDetail.setValuesForKeys(json)// as! [String:AnyObject])
+                        appDetail.setValuesForKeys(json)
                         self.app = appDetail
                         DispatchQueue.main.async(execute: { () -> Void in
                             self.collectionView?.reloadData()
@@ -44,6 +44,8 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
     private let headerId = "headerId"
     private let cellId = "cellId"
     private let descriptionCellId = "descriptionCellId"
+    private let informationCellId = "informationCellId"
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +55,7 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
         collectionView?.register(AppDetailHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView?.register(ScreenshotsCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.register(AppDetailDescriptionCell.self, forCellWithReuseIdentifier: descriptionCellId)
+        collectionView?.register(InformationCell.self, forCellWithReuseIdentifier: informationCellId)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -60,6 +63,12 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
         if indexPath.item == 1{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: descriptionCellId, for: indexPath) as! AppDetailDescriptionCell
             cell.textView.attributedText = descriptionAttributedText()
+            return cell
+        }
+        
+        if indexPath.item == 2{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: informationCellId, for: indexPath) as! InformationCell
+            cell.textView.attributedText = informationAttributedText()
             return cell
         }
         
@@ -88,8 +97,27 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
         return attributedText
     }
     
+    private func informationAttributedText() -> NSAttributedString{
+        let attributedText = NSMutableAttributedString(string: "Information\n", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)])
+        
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 10
+        let range = NSMakeRange(0, attributedText.string.count)
+        attributedText.addAttribute(kCTParagraphStyleAttributeName as NSAttributedStringKey, value: style, range: range)
+        
+        if let info = app?.appInformation{
+            for obje in info {
+                let name = obje.name! + " : "
+                let value = obje.value! + "\n"
+                attributedText.append(NSAttributedString(string: name, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 11), NSAttributedStringKey.foregroundColor : UIColor.gray]))
+                attributedText.append(NSAttributedString(string: value, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 11), NSAttributedStringKey.foregroundColor : UIColor.darkGray]))
+            }
+        }
+        return attributedText
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -116,6 +144,25 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
         return CGSize(width: view.frame.width, height: 170)
     }
     
+}
+
+class InformationCell: BaseCell {
+    let textView : UITextView = {
+        let tv = UITextView()
+        tv.text = "SAMPLE Information"
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
+    }()
+    
+    override func setupViews() {
+        super.setupViews()
+        
+//        backgroundColor = .red
+        
+        addSubview(textView)
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[textView]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["textView":textView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-4-[textView]-4-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["textView":textView]))
+    }
 }
 
 class AppDetailDescriptionCell: BaseCell {
