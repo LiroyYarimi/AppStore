@@ -52,15 +52,6 @@ class AppCategory : NSObject{
                 let featuredApp = FeaturedApps()
                 featuredApp.setValuesForKeys(json)//as! [String: AnyObject])
                 
-                //                var appCategories = [AppCategory]()
-                //
-                //                for dict in json["categories"] as! [[String:AnyObject]]{
-                //
-                //                    let appCategory = AppCategory()
-                //                    appCategory.setValuesForKeys(dict)
-                //                    appCategories.append(appCategory)
-                //                }
-                
                 //send appCategories to FeaturedAppController class
                 DispatchQueue.main.async(execute: { () -> Void in
                     completionHandler(featuredApp)

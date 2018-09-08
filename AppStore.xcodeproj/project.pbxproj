@@ -19,6 +19,7 @@
 		C89064EF2141225D008262FB /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89064EE2141225D008262FB /* Header.swift */; };
 		C89064F121412297008262FB /* LargeCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89064F021412297008262FB /* LargeCategoryCell.swift */; };
 		C89064F321412524008262FB /* AppDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89064F221412524008262FB /* AppDetailController.swift */; };
+		C89064F52142AA5A008262FB /* ScreenshotsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89064F42142AA5A008262FB /* ScreenshotsCell.swift */; };
 		C8CCA52E213D8301004017D4 /* FeaturedApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CCA52D213D8301004017D4 /* FeaturedApps.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		C89064EE2141225D008262FB /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		C89064F021412297008262FB /* LargeCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCategoryCell.swift; sourceTree = "<group>"; };
 		C89064F221412524008262FB /* AppDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailController.swift; sourceTree = "<group>"; };
+		C89064F42142AA5A008262FB /* ScreenshotsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotsCell.swift; sourceTree = "<group>"; };
 		C8CCA52D213D8301004017D4 /* FeaturedApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedApps.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,6 +79,7 @@
 				C83AEF82213C36F10030FC0A /* CategoryCell.swift */,
 				C89064EB214121B8008262FB /* AppCell.swift */,
 				C89064F221412524008262FB /* AppDetailController.swift */,
+				C89064F42142AA5A008262FB /* ScreenshotsCell.swift */,
 				C89064EA21412187008262FB /* Models */,
 				C89064ED2141220B008262FB /* Supporting Files */,
 			);
@@ -185,6 +188,7 @@
 				C83AEF83213C36F10030FC0A /* CategoryCell.swift in Sources */,
 				C89064F321412524008262FB /* AppDetailController.swift in Sources */,
 				C8CCA52E213D8301004017D4 /* FeaturedApps.swift in Sources */,
+				C89064F52142AA5A008262FB /* ScreenshotsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

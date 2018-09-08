@@ -16,16 +16,24 @@ class App : NSObject{
     var imageName: String?
     var price : NSNumber?
     
+    var screenshots : [String]?
+    var desc : String?
+    var appInformation : AnyObject?
+    
     override init() {
         return
     }
     
-    init(id:NSNumber?, name: String,category:String, imageName:String, price: NSNumber) {
+    init(id:NSNumber?, name: String,category:String, imageName:String, price: NSNumber, screenshots: [String]?,desc : String?, appInformation:AnyObject?) {
         self.id = id
         self.name = name
         self.category = category
         self.imageName = imageName
         self.price = price
+        
+        self.screenshots = screenshots
+        self.desc = desc
+        self.appInformation = appInformation
     }
     
     //override setValue func - for set value of our properties
@@ -40,6 +48,12 @@ class App : NSObject{
             self.imageName = value as! String?
         }else if key == "Price"{
             self.price = value as! NSNumber?
+        }else if key == "Screenshots"{
+            self.screenshots = value as! [String]?
+        }else if key == "description"{
+            self.desc = value as? String
+        }else if key == "appInformation"{
+            self.appInformation = value as AnyObject
         }else{
             super.setValue(value, forKey: key)
         }
