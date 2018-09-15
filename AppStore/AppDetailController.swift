@@ -102,14 +102,23 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
         
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 10
+//        style.alignment = .right
         let range = NSMakeRange(0, attributedText.string.count)
         attributedText.addAttribute(kCTParagraphStyleAttributeName as NSAttributedStringKey, value: style, range: range)
         
         if let info = app?.appInformation{
             for obje in info {
-                let name = obje.name! + " : "
+                var name = obje.name!
+                if name == "Size"{ //fix the spaces
+                    name = obje.name! + "\t\t\t"
+                }else if name == "Family Sharing" || name == "Compatibility"{
+                    name = obje.name! + "\t"
+                }else{
+                    name = obje.name! + "\t\t"
+                }
                 let value = obje.value! + "\n"
-                attributedText.append(NSAttributedString(string: name, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 11), NSAttributedStringKey.foregroundColor : UIColor.gray]))
+                
+                attributedText.append(NSAttributedString(string: name, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 11), NSAttributedStringKey.foregroundColor : UIColor.gray ]))
                 attributedText.append(NSAttributedString(string: value, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 11), NSAttributedStringKey.foregroundColor : UIColor.darkGray]))
             }
         }
@@ -129,6 +138,9 @@ class AppDetailController: UICollectionViewController , UICollectionViewDelegate
             
             return CGSize(width: view.frame.width, height: rect.height + 30) //colcolate the text height
         }
+//        else if indexPath.item == 2{//info cell
+//            return CGSize(width: view.frame.width/2, height: 170)
+//        }
         return CGSize(width: view.frame.width, height: 170)
     }
     
@@ -153,6 +165,7 @@ class InformationCell: BaseCell {
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
+
     
     override func setupViews() {
         super.setupViews()
@@ -160,7 +173,7 @@ class InformationCell: BaseCell {
 //        backgroundColor = .red
         
         addSubview(textView)
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[textView]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["textView":textView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[textView]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["textView":textView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-4-[textView]-4-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["textView":textView]))
     }
 }
