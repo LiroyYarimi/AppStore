@@ -8,9 +8,10 @@
 
 import UIKit
 
-class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UICollectionViewDelegate{
+class CategoryCell: BaseCell, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UICollectionViewDelegate{
     
     var featuredAppsController : FeaturedAppController?
+    private let cellId = "appCellId"
     
     var appCategory : AppCategory? {
         didSet{
@@ -21,16 +22,9 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         }
     }
 
-    private let cellId = "appCellId"
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    
-    //all the app cell is here. because we did that app cell will cover all the big cell (vertical cell) so we can't see the different. unless we write "H:|-8-[v0]-8-|"
-    let appCollectionView : UICollectionView = { // create new collection view inside our cell
+
+    // create new collection view inside our cell - collection view for our apps.
+    let appCollectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal // horizontal scrolling
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -41,6 +35,7 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         return collectionView
     }()
     
+    //create a divider line
     let dividerLineView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
@@ -48,6 +43,7 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         return view
     }()
     
+    //title of category
     let nameLabel :UILabel = {
         let label = UILabel()
         label.text = "Best New Apps"
@@ -57,11 +53,7 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
     }()
     
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupViews(){ //apps container cell. the big vertical cell
+    override func setupViews(){ //apps container cell. the big vertical cell
         backgroundColor = UIColor.clear
         
         addSubview(appCollectionView) //inside each cell add app cell
@@ -73,18 +65,15 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         
         appCollectionView.register(AppCell.self, forCellWithReuseIdentifier: cellId)//AppCell class is our cell
         
+        
+        // addConstraints
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":nameLabel]))
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":dividerLineView]))
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":appCollectionView]))
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[nameLabel(30)][v0][v1(0.5)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":appCollectionView,"v1":dividerLineView,"nameLabel":nameLabel]))
-    
-        
     }
     
-    //numberOfItemsInSection - appCategory?.apps?.count- number of apps per category
+    //numberOfItemsInSection - "appCategory?.apps?.count"- number of apps per category
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let count =  appCategory?.apps?.count{
             return count
@@ -97,7 +86,7 @@ class CategoryCell: UICollectionViewCell ,UICollectionViewDataSource,UICollectio
         return CGSize(width: 100, height: frame.height - 32)//substract 32 because the title
     }
     
-    //create cell
+    //cellForItemAt - create cell. create the app cells (horizontal)
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppCell
         cell.app = appCategory?.apps?[indexPath.item]

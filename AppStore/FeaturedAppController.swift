@@ -9,10 +9,11 @@
 import UIKit
 
 class FeaturedAppController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    //this is the main class. our app start here.
     
-    private let cellId = "cellId"
-    private let largeCellId = "largeCellId"
-    private let headerId = "headerId"
+    private let CategoryCellId = "CategoryCellId" //cell id for Category Cell
+    private let largeCellId = "largeCellId" //cell id for the large cell (third line)
+    private let headerId = "headerId" //cell id for header cell (the top cell)
     var appCategories : [AppCategory]?
     var featuredApps:FeaturedApps?
 
@@ -28,14 +29,14 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
         }
         
         collectionView?.backgroundColor = UIColor.white
-        collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCellId)
         collectionView?.register(LargeCategoryCell.self, forCellWithReuseIdentifier: largeCellId)
         collectionView?.register(Header.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerId)
     }
     
  
     
-    //show App Details
+    //show App Details. when user press on spesific app (CategoryCell class is call this function), show the app detail
     func showAppDetailForApp(app:App){
         
         let layout = UICollectionViewFlowLayout()
@@ -44,7 +45,15 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
         navigationController?.pushViewController(appDetailController, animated: true)
     }
     
-    //cellForItemAt - create cell
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! Header
+        header.appCategory = featuredApps?.bannerCategory
+        return header
+    }
+    
+    //MARK: - create cell
+    
+    //cellForItemAt - create cell. create the category cells (vertical). (the header cell have there own function)
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.item == 2{ //third cell need to be larger
@@ -55,13 +64,16 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
             return cell
         }
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CategoryCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCellId, for: indexPath) as! CategoryCell
         cell.appCategory = appCategories?[indexPath.item]
         cell.featuredAppsController = self
         
         return cell
     }
-    //numberOfItemsInSection - number of items
+    
+    //MARK: - number of cell items
+    
+    //numberOfItemsInSection - number of items (number of categories -include header and large cell(4) - vertical)
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let count = appCategories?.count{
             return count
@@ -70,24 +82,22 @@ class FeaturedAppController: UICollectionViewController, UICollectionViewDelegat
         }
     }
     
-    //sizeForItemAt - cell size
+    
+    
+    //MARK: - cell size - of category cell, header cell and large cell (third line)
+    
+    //sizeForItemAt - cell size (category cell)
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if indexPath.item == 2{
+        if indexPath.item == 2{//third line (large cell)
             return CGSize(width: view.frame.width, height: 160)
         }
         return CGSize(width: view.frame.width, height: 230)
     }
     
-    //referenceSizeForHeaderInSection -
+    //referenceSizeForHeaderInSection - size of the header cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 120)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! Header
-        header.appCategory = featuredApps?.bannerCategory
-        return header
     }
 
 }

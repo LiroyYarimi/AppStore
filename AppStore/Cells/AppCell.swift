@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppCell: UICollectionViewCell { //the inside cell (app cell)
+class AppCell: BaseCell { //the inside cell (app cell)
     
     var app: App?{
         didSet{
@@ -44,14 +44,6 @@ class AppCell: UICollectionViewCell { //the inside cell (app cell)
     }
     
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     let imageView : UIImageView = {
         let iv = UIImageView()
@@ -86,7 +78,7 @@ class AppCell: UICollectionViewCell { //the inside cell (app cell)
         return label
     }()
     
-    func setupViews() {//app cell view
+    override func setupViews() {//app cell view
         //        backgroundColor = UIColor.black
         
         addSubview(imageView)

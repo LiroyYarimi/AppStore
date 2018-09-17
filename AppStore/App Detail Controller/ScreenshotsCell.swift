@@ -10,12 +10,15 @@ import UIKit
 
 class ScreenshotsCell: BaseCell ,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     
+    private let cellId = "cellId"
+    
     var app : App? {
         didSet{
             collectionView.reloadData()
         }
     }
     
+    //create another collection view for image screenshot
     let collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -24,8 +27,6 @@ class ScreenshotsCell: BaseCell ,UICollectionViewDataSource, UICollectionViewDel
         cv.backgroundColor = .clear
         return cv
     }()
-    
-    private let cellId = "cellId"
     
     let dividerLineView: UIView = {
         let view = UIView()
